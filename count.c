@@ -17,13 +17,15 @@ tags. Auxiliary functions can also be defined between those lines.
 /*<START_CODE>*/
 
 int stack_count_if(Stack *stack, Boolean (*ele_check)(void *)) {
-  Stack *aux = stack_new();
+  Stack *aux = NULL;
   void *element = NULL;
   long i = 0;
 
-  if (!stack || !ele_check || !aux) return COUNT_ERROR;
+  if (!stack || !ele_check) return COUNT_ERROR;
+  
+  if (!(aux = stack_new())) return COUNT_ERROR;
 
-  while (stack_is_empty(stack) == FALSE) {
+  while (stack_is_empty(stack) == FALSE) { 
     if (ele_check(element = stack_pop(stack))) {
       i++;
     }
@@ -34,6 +36,7 @@ int stack_count_if(Stack *stack, Boolean (*ele_check)(void *)) {
     stack_push(stack, stack_pop(aux));
   }
 
+  stack_free(aux);
   return i;
 }
 
